@@ -1,6 +1,6 @@
-TARGET = twi
-MCU = atmega328p
-F_CPU = 8000000
+TARGET = amg8853
+MCU = atmega64
+F_CPU = 7372800
 CFLAGS = -D F_CPU=$(F_CPU) -mmcu=$(MCU) -g -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall
 
 %.a: %.o

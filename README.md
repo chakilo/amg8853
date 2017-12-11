@@ -1,51 +1,63 @@
-# avr-twi
+# amg8853
 
-Nonblocking TWI/I2C master driver for Atmel AVR
+AMG8853 driver for ATMega 64 (or any other Atmel AVR MCU)
+
+## Example
+
+```c
+#include "amg8853.h"
+
+int main(void) {
+
+    // initializes driver
+    amg8853_init();
+
+    // initializes buffer
+    uint8_t amg8853_read_data_buff[128];
+
+    // read data
+    amg8853_twi_read_64_tem(amg8853_read_data_buff);
+
+    // initializes result
+    uint8_t sign, integerPart, decimalPart;
+
+    // temperature convert
+    amg8853_tem_convert(amg8853_read_data_buff, 0, 
+        &sign, &integerPart, &decimalPart);
+
+    return 0;
+}
+```
 
 ## API
 
-###### `void twi_init()`
+###### `void amg8853_init()`
 
-Initializes the driver.  Should be called once before calling any other TWI functions.
+Initializes the driver.  Should be called once before read data from amg8853.
 
-###### `void twi_write(uint8_t address, uint8_t* data, uint8_t length, void (*callback)(uint8_t address, uint8_t *data))`
+###### `void amg8853_twi_read_64_tem(uint8_t buff[])`
 
-Writes data to the given address.
+Receive 128 bytes data from amg8853 using twi.
 
-* `address` - TWI slave address
-* `data` - pointer to data buffer
-* `length` - numer of bytes to write from the given data buffer
-* `callback` - function pointer to callback (called when write completes)
+* `buff` - buffer. 128 bytes. Should be initialized before calling this function.
 
-The callback should accept two arguments:
+###### `void amg8853_tem_convert(uint8_t buff[], uint8_t snumber, uint8_t *sign, uint8_t *integer_part, uint8_t *decimal_part)`
 
-* `address` - TWI slave address
-* `data` - pointer to data buffer that was written
+Convert the data to Celsius temperature.
 
-###### `void twi_read(uint8_t address, uint8_t length, void (*callback)(uint8_t address, uint8_t *data))`
+* in
+    * `buff` - data from amg8853. 128 bytes.
+    * `snumber` - sensor index 0~63
 
-Reads data from the given address.
-
-* `address` - TWI slave address
-* `length` - number of bytes to read
-* `callback` - function pointer to callback (called when read is complete)
-
-The callback should accept two arguments:
-
-* `address` - TWI slave address
-* `data` - pointer to data buffer that was written
-
-###### `uint8_t *twi_wait()`
-
-This will block until the current operation (read or write) completes or return immediately if there is no operation in progress.  It returns a pointer to the internal TWI buffer.  This is useful for performing initialization read/writes where asynchrony may be unnecessary.  Call it between read/write calls.
-
-    twi_write(address, &data, 2, NULL);
-    twi_wait();
-    twi_read(address, 2, NULL);
-    uint8_t *result = twi_wait();
+* out
+    * `sign` - sign of the result 1:negative, 0:positive
+    * `integer_part` - integer part of the result 0~255
+    * `decimal_part` - decimal part of the result (multiply by 100) 0~99
 
 ## Definitions
 
-* `F_CPU` - you should define this before including this library
-* `TWI_FREQ` - defaults to 100kHz if left undefined
-* `TWI_BUFFER_LENGTH` - defaults to 32 if left undefined
+* `AMG8853_DELAY` - not used
+* `AMG8853_TEM_START_ADDR` - start address of temperature registers
+* `AMG8853_SENSOR_ADDR` - 0b1101000 or 0b1101010
+* `AMG8853_WRITE` - not used
+* `AMG8853_READ` - not used

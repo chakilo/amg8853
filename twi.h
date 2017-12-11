@@ -8,7 +8,7 @@
 #endif
 
 #ifndef TWI_BUFFER_LENGTH
-#define TWI_BUFFER_LENGTH 32
+#define TWI_BUFFER_LENGTH 128
 #endif
 
 void twi_init();
