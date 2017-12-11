@@ -19,11 +19,17 @@ int main(void) {
     amg8853_twi_read_64_tem(amg8853_read_data_buff);
 
     // initializes result
-    uint8_t sign, integerPart, decimalPart;
+    uint8_t sign, celsius_temperature_integer_part, celsius_temperature_decimal_part;
 
     // temperature convert
-    amg8853_tem_convert(amg8853_read_data_buff, 0, 
-        &sign, &integerPart, &decimalPart);
+    uint8_t i;
+    for (i = 0; i < 64; i++) {
+        amg8853_tem_convert(amg8853_read_data_buff, i, 
+            &sign, &celsius_temperature_integer_part, &celsius_temperature_decimal_part);
+        
+        // do something
+        
+    }
 
     return 0;
 }
@@ -56,7 +62,7 @@ Convert the data to Celsius temperature.
 
 ## Definitions
 
-* `F_CPU` - you should define this before including this library
+* `F_CPU` - should be defined as the CPU Clock frequency
 * `AMG8853_DELAY` - not used
 * `AMG8853_TEM_START_ADDR` - start address of temperature registers. do not need to modify
 * `AMG8853_SENSOR_ADDR` - 0b1101000 or 0b1101010
