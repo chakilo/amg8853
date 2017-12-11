@@ -33,7 +33,7 @@ int main(void) {
 
 ###### `void amg8853_init()`
 
-Initializes the driver.  Should be called once before read data from amg8853.
+Initializes the driver.  Should be called once before reading data from amg8853.
 
 ###### `void amg8853_twi_read_64_tem(uint8_t buff[])`
 
@@ -56,8 +56,9 @@ Convert the data to Celsius temperature.
 
 ## Definitions
 
+* `F_CPU` - you should define this before including this library
 * `AMG8853_DELAY` - not used
-* `AMG8853_TEM_START_ADDR` - start address of temperature registers
+* `AMG8853_TEM_START_ADDR` - start address of temperature registers. do not need to modify
 * `AMG8853_SENSOR_ADDR` - 0b1101000 or 0b1101010
 * `AMG8853_WRITE` - not used
 * `AMG8853_READ` - not used
